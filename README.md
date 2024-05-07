@@ -1,201 +1,41 @@
-# ![logo](https://raw.githubusercontent.com/azerothcore/azerothcore.github.io/master/images/logo-github.png) AzerothCore
+![logo](https://raw.githubusercontent.com/azerothcore/azerothcore.github.io/master/images/logo-github.png)
 
 # AzerothCore Ansible
 
-## Introduction
+This repository uses [Ansible](https://ansible.com/) to set up and run [AzerothCore](https://github.com/azerothcore/azerothcore-wotlk) - a World of Warcraft 3.3.5a (Wrath of the Lichking) framework - on a [Ubuntu 22.04 server](https://ubuntu.com/server). It does not (officially) support other Linux distributions.
 
-Install and maintain AzerothCore easily using Ansible.
+This project is designed to help you continue the educational spirit of AzerothCore and take advantage of its work, **not** host public facing World of Warcraft servers.
 
-For now it will only work using a local MySQL/MariaDB installation.
+**Note**: you _do not_ need to provide the World of Warcraft client. This repository also **does not** contain the client. We **cannot** (and **will not**) help you obtain the World of Warcraft client.
 
-This was initially created for Debian 10, but is now used for Ubuntu 20.04.
+## Original Author
 
-It's likely it will work just fine for other new Debian-derived systems as well with minor modifications.
+Thanks to the original author, https://github.com/Zoidwaffle/AzerothCore-Ansible.git, for the starting point. I took their work and have, in my opinion, improved upon it (and will continue to do so.)
 
-## Requirements
+## Support
 
-You need a target server running Ubuntu 20.04 where the software will be installed.
+- For support with this Ansible code base, checkout the [author's Discord server](https://discord.gg/h2UVFBsXXp)
+- For support with [AzerothCore](https://github.com/azerothcore/azerothcore-wotlk), checkout their excellent [Discord server](https://discord.gg/bekucdQK7w)
 
-To initiate the installation, you need a Linux machine with Ansible. This can be a different machine or the target server itself.
+### Further support
 
-Install the basic requirements:
-```
-# If you are already root, skip the 'sudo su' command
-sudo su
-apt update
-apt install git python-pip
-pip install ansible
-```
+If you need support with Linux, Ansible, programming, and more, then this repository's sponsor [Upload Academy](https://upload.academy/) has various options available. Please consider supporting by buying a micro-course - they're perfect for beginners and people trying to break into the IT field. 
 
-The reason for using **pip** is that the version of Ansible will be newer than if using the default from normal repositories.
+## Too long; didn't read
 
-## Preparations
+Straight up instructions are below, however you are expected to know how-to operate a Linux server, the command-line, edit files, and other simple sytems administrative tasks. The job of administrating _any_ Linux server isn't easy.
 
-Checkout this repository.
+1. You will need to install Ansible either on the server you want to run the AzerothCore on or on a "control node" that can connect to the server;
+1. Now you need to update `inventory.txt` to support whatever option you selected above - you can leave it as-is if you're running Ansible on the server directly;
+1. Next, execute `ansible-playerbook dependencies.yml -i inventory.txt --ask--become-pass` to set up the server - this is the only time you will need root privileges on the server;
+1. Now edit `group_vars/all.yml` if you require a custom configuration (i.e. `azerothcore_realmlist_ip` will need to change if you're not running AzerothCore locally);
+1. Finally, run `ansible-playbook all.yml -i inventory.txt`
 
-`git clone https://github.com/Zoidwaffle/AzerothCore-Ansible.git`
+Update your client's `realmlist.wtf` file to point the `set realmlist` option to the `azerothcore_realmlist_ip` you chose in your configure (`group_vars/all.yml`)
 
-You will need to copy the file:
+## _Missing_ Features
 
-`group_vars/all.dist -> group_vars/all`
-
-and modify it to your liking before running Ansible in case you want to change some defaults. If you do change the defaults, be aware that some details in the guide here might differ so adjust accordingly.
-
-Be aware that since the server will run as its own user and the game client is required for map generation, you might have to run the playbook twice. This is not an error, just see the messages and do as instructed until all is done. 
-
-### Setup the initial parts
-
-Initial run of Ansible. This requires root (or sudo) to install system dependancies and create the proper user. This is ONLY required for the very initial run.
-
-Replace ***IP*** with the proper address in the examples below. Instead of the IP address you can use a DNS reference or localhost (if running this on the target server itself).
-
-If you are root:
-
-`ansible-playbook azerothcore.yml --extra-vars '{"target": "IP"}' -i IP, -u root --ask-pass`
-
-If you are a sudo user:
-
-`ansible-playbook azerothcore.yml --extra-vars '{"target": "IP"}' -i IP, -u username_here --ask-become --ask-pass`
-
-This should create the user used for AzerothCore and provide info regarding the client folder structure.
-
-### Make the game client accessible
-
-To generate the various maps needed, the game client files must be accessible on the target server.
-
-The default location for the game client is:
-
-`/home/azerothcore/wow_client`
-
-so copy an installed version of the game into this folder and make sure it's owned by the `azerothcore` user.
-
-### Install the server
-
-Now you can run the playbook again as your new user and setup everything.
-
-`ansible-playbook azerothcore.yml --extra-vars '{"target": "IP"}' -i IP, -u azerothcore --ask-pass --ask-become`
-
-The map extraction will take a while, so be patient! Grab some coffee, go for a walk etc..
-
-### Running the server
-
-Scripts to handle the server using systemd have been added - so to stop and start the services as user azerothcore do:
-
-```
-sudo systemctl start worldserver
-sudo systemctl stop worldserver
-sudo systemctl reload worldserver
-sudo systemctl status worldserver
-```
-
-Similar for authserver:
-
-```
-sudo systemctl start authserver
-sudo systemctl stop authserver
-sudo systemctl reload authserver
-sudo systemctl status authserver
-```
-
-To see the current status of either server and get the CLI as user azerothcore do:
-
-```
-screen -r authserver
-screen -r worldserver
-```
-
-### Important info regarding folder structure
-
-This is the default structure and some important files with comments.
-```
-. azerothcore-wotlk                 # The home folder of the project
-  ├── acore                         # This is a symlink to the latest build
-  ├── acore_b3a96                   # Latest build (the hash suffix will change)
-  │   └── server                    # The compiled server
-  │       ├── bin                   # Main binaries
-  │       ├── data                  # DBC and map-files
-  │       ├── etc                   # Server configuration files
-  │       └── log                   # Log files
-  ├── backup                        # Folder with database tools and backups
-  │   ├── backup.sh                 # Backup all databases easily
-  │   ├── create_databases.sql      # Create the user and databases needed
-  │   └── drop_databases.sh         # Drop the databases and user (if recreating from scratch)
-  ├── source                        # The source code
-  │   └── modules                   # Various modules
-  └─── client                   # The game client
-```
-
-When AzerothCore is compiled, there will be created a folder with the latest commit as reference. Example:
-
-`azerothcore_90a10a`
-
-There will also be created a symlink, to indicate the active version of the software. Example:
-
-`azerothcore -> azerothcore_90a10a`
-
-When compiling a new version, the old version will not be overwritten. So you will end up with multiple folders such as:
-
-```
-azerothcore_be09e0
-azerothcore_90a10a
-```
-
-### Maintenance
-
-If you are compiling often, this will take up a lot space, so remember to clean up once in a while.
-
-#### Backup databases
-
-Example as how to do a database backup - you are in the `/home/azerothcore/` folder:
-
-```
-# Stop the running services, this is recommended!
-sudo systemctl stop authserver
-sudo systemctl stop worldserver
-# Go to the folder for database files
-cd azerothcore/database/
-# Take the backup
-./backup.sh
-# Start the services again
-sudo systemctl start authserver
-sudo systemctl start worldserver
-```
-
-#### Roll back to previous release
-
-Example as how to roll back to a previous build - you are in the `/home/azerothcore/` folder:
-
-```
-# Stop the running services
-sudo systemctl stop authserver
-sudo systemctl stop worldserver
-# Find the release to return to - here it's be09e0
-# Restore database to previous state - be careful, consider a backup first
-zcat azerothcore_be09e0/database/acore_characters.sql.gz | mysql acore_characters
-zcat azerothcore_be09e0/database/acore_auth.sql.gz | mysql acore_auth
-zcat azerothcore_be09e0/database/acore_world.sql.gz | mysql acore_world
-# Change active version of the software
-rm azerothcore
-ln -s azerothcore_be09e0 azerothcore
-# Start the services again
-sudo systemctl start authserver
-sudo systemctl start worldserver
-```
-
-#### Compile from scratch
-
-Example as how to start over setting up the server - you are in the `/home/azerothcore/` folder:
-
-```
-# Stop the running services
-sudo systemctl stop authserver
-sudo systemctl stop worldserver
-# Go to the folder for database files
-cd azerothcore/database/
-# Drop the databases and user
-sudo ./drop_databases.sh
-# Remove the symlink - go to /home/azerothcore/ again
-cd -
-rm azerothcore
-# You can rename or delete the folder - then run Ansible again
-```
+- I disabled the database backup features of the original code as I believe that something that should be done outside of Ansible (but it can be managed by Ansible)
+- There's no support for setting up multiple world server, but I'll add the ability to launch a PTR server soon
+- I want to add the feature to download a pre-compiled binary (which I'll eventually provide) instead of the source and compiling everything
+- Docker support will never be added as it's pointless for this and there's work being done there anyway

@@ -1,6 +1,11 @@
 ---
-- hosts: "{{ target }}"
-  connection: ssh
+
+- hosts: all
   become: no
   roles:
-    - azerothcore
+    - role: azerothcore
+      azerothcore_branch: "c9bdf4c0ef721453137508560e759cb7dda02e12"
+      azerothcore_realmlist_ip: "192.168.88.146"
+      azerothcore_realmlist_local_ip: "192.168.88.146"
+      azerothcore_realmlist_name: "Boats and Hoes" 
+

@@ -1,0 +1,13 @@
+---
+
+- include_tasks: tasks/init.yml
+  tags:
+    - database-init
+
+- include_tasks: tasks/core.yml
+  tags:
+    - database-core
+
+- include_tasks: tasks/custom.yml
+  tags:
+    - database-custom

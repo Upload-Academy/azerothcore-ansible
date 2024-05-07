@@ -3,45 +3,43 @@
 # Create the proper databases/user needed
 #####################
 
-- name: Database related scripts
+- name: Create the database directory
+  file:
+    path: "{{ home }}/{{ azerothcore_folder }}/database/"
+    state: directory
+
+- name: Database related files
   template:
-    src: "sql/{{ item.file }}"
-    dest: "/home/{{ azerothcore_user }}/{{ azerothcore_folder }}/backup/"
-    owner: "{{ azerothcore_user }}"
-    group: "{{ azerothcore_user }}"
-    mode: "{{ item.mode }}"
+    src: "sql/{{ item }}"
+    dest: "{{ home }}/{{ azerothcore_folder }}/database/"
   with_items:
-    - { file: "backup.sh", mode: "0755" }
-    - { file: "create_databases.sql", mode: "0644" }
-    - { file: "drop_databases.sh", mode: "0755" }
+    - auth_custom.sql
 
 # Only run this if there is no previous server aka a new install
 - name: Create databases, handle users etc.
-  shell: mysql < "/home/{{ azerothcore_user }}/{{ azerothcore_folder }}/backup/create_databases.sql"
-  when: former_build.stat.exists is defined and former_build.stat.exists == false
-  become: true
+  shell: "mysql -u {{ azerothcore_db_user }} --password={{ azerothcore_db_password }} {{ azerothcore_db_auth }} < {{ home }}/{{ azerothcore_folder }}/database/auth_custom.sql"
 
 #####################
 # Importing SQL
 #####################
 
-- name: Custom SQL files
-  template:
-    src: "sql/{{ item.file }}"
-    dest: "/home/{{ azerothcore_user }}/{{ azerothcore_folder }}/{{ azerothcore_source }}/data/sql/custom/{{ item.destination }}/"
-    owner: "{{ azerothcore_user }}"
-    group: "{{ azerothcore_user }}"
-    mode: "{{ item.mode }}"
-  with_items:
-    - { file: "auth_custom.sql", destination: "db_auth", mode: "0644" }
+# - name: Custom SQL files
+#   template:
+#     src: "sql/{{ item.file }}"
+#     dest: "/home/{{ azerothcore_user }}/{{ azerothcore_folder }}/{{ azerothcore_source }}/data/sql/custom/{{ item.destination }}/"
+#     owner: "{{ azerothcore_user }}"
+#     group: "{{ azerothcore_user }}"
+#     mode: "{{ item.mode }}"
+#   with_items:
+#     - { file: "auth_custom.sql", destination: "db_auth", mode: "0644" }
 
 #####################
 # Backup SQL
 #####################
 
-- name: Backup databases
-  shell: cd "/home/{{ azerothcore_user }}/{{ azerothcore_folder }}/backup/" && ./backup.sh
-  when: former_build.stat.exists is defined and former_build.stat.exists == true
+# - name: Backup databases
+#   shell: cd "/home/{{ azerothcore_user }}/{{ azerothcore_folder }}/backup/" && ./backup.sh
+#   when: former_build.stat.exists is defined and former_build.stat.exists == true
 
   ######################
   ## Updating SQL after the backup

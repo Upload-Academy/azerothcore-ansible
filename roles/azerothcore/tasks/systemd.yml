@@ -1,0 +1,28 @@
+---
+
+# Create local user systemd directory
+- name: Make sure user directory exists in local systemd config
+  file:
+    path: "{{ home }}/.config/systemd/user"
+    state: directory
+
+# Upload our config files
+- name: Parse and upload our unit files
+  template:
+    src: "etc/systemd/system/{{ item }}.service"
+    dest: "{{ home }}/.config/systemd/user/{{ item }}.service"
+  loop:
+    - authserver
+    - worldserver
+
+# Start services
+- name: Enable and start both services
+  systemd_service:
+    name: "{{ item }}"
+    state: started
+    enabled: yes
+    daemon_reexec: yes
+    scope: user
+  loop:
+    - authserver
+    - worldserver

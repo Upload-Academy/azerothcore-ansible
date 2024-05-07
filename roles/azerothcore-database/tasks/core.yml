@@ -1,0 +1,23 @@
+---
+
+# Core database tables for everything
+- name: Find and run the base AzerothCore SQL files - db_auth
+  shell: "mysql -u {{azerothcore_db_user}} --password={{azerothcore_db_password}} acore_auth < {{ item }}"
+  with_fileglob:
+    - "{{ home }}/{{ azerothcore_folder }}/source/data/sql/base/db_auth/*.sql"
+  tags:
+    - database-core
+
+- name: Find and run the base AzerothCore SQL files - db_world
+  shell: "mysql -u {{azerothcore_db_user}} --password={{azerothcore_db_password}} acore_world < {{ item }}"
+  with_fileglob:
+    - "{{ home }}/{{ azerothcore_folder }}/source/data/sql/base/db_world/*.sql"
+  tags:
+    - database-core
+
+- name: Find and run the base AzerothCore SQL files - db_characters
+  shell: "mysql -u {{azerothcore_db_user}} --password={{azerothcore_db_password}} acore_characters < {{ item }}"
+  with_fileglob:
+    - "{{ home }}/{{ azerothcore_folder }}/source/data/sql/base/db_characters/*.sql"
+  tags:
+    - database-core

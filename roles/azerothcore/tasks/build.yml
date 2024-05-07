@@ -1,88 +1,16 @@
 ---
-#####################
-# Main source code
-#####################
 
-- name: Checkout AzerothCore code
-  git:
-    repo: "{{ azerothcore_git }}"
-    dest: "/home/{{ azerothcore_user }}/{{ azerothcore_folder }}/{{ azerothcore_source }}"
-    version: "{{ azerothcore_branch }}"
-    force: "{{ azerothcore_git_force }}"
-  become_user: "{{ azerothcore_user }}"
+- name: Move our compile script into place
+  template:
+    src: compile.sh
+    dest: "{{ home }}/{{ azerothcore_folder }}/compile.sh"
+    mode: "0775"
+  tags:
+    - build
 
-#####################
-# Do we have updates or not...
-#####################
-
-- name: Get the latest (short) Git commit tag
-  shell: cd "/home/{{ azerothcore_user }}/{{ azerothcore_folder }}/{{ azerothcore_source }}" && git rev-parse --short=6 $(git rev-parse HEAD)
-  register: git_commit_tag
-
-- name: Use last commit as name reference
-  set_fact:
-    azerothcore_server_release: "{{ azerothcore_server }}_{{ azerothcore_branch }}_{{ git_commit_tag.stdout }}"
-
-# If this folder exists, we already compiled the current version...
-- name: Check if the current version is compiled already
-  stat:
-    path: "/home/{{ azerothcore_user }}/{{ azerothcore_folder }}/{{ azerothcore_server_release }}"
-  register: release_folder
-
-- name: Information if we don't need to compile
-  debug:
-    msg: "Server for release {{ git_commit_tag.stdout }} already exists, will exit"
-  when: release_folder.stat.exists
-
-- meta: end_play
-  when: release_folder.stat.exists
-
-#####################
-# Custom modules
-#####################
-
-- name: Look for modules
-  find:
-    paths: "/home/{{ azerothcore_user }}/{{ azerothcore_folder }}/{{ azerothcore_source }}/modules/"
-    recurse: no
-    file_type: directory
-  register: modules_folder
-
-- name: Update modules
-  shell: cd "{{ item.path }}" && git pull
-  with_items:
-    - "{{ modules_folder.files }}"
-  when: modules_folder is defined and modules_folder != ""
-
-#####################
-# Build
-#####################
-
-- name: Remove previous build folder
-  file:
-    path: "/home/{{ azerothcore_user }}/{{ azerothcore_folder }}/{{ azerothcore_source }}/build"
-    state: "absent"
-
-- name: Create new build folder
-  file:
-    path: "/home/{{ azerothcore_user }}/{{ azerothcore_folder }}/{{ azerothcore_source }}/build"
-    mode: "0755"
-    state: "directory"
-    owner: "{{ azerothcore_user }}"
-    group: "{{ azerothcore_user }}"
-
-- name: Debug - configure before compiling
-  debug:
-    msg: 'cd "/home/{{ azerothcore_user }}/{{ azerothcore_folder }}/{{ azerothcore_source }}/build" && cmake ../ -DCMAKE_INSTALL_PREFIX="/home/{{ azerothcore_user }}/{{ azerothcore_folder }}/{{ azerothcore_server_release }}" -DCMAKE_C_COMPILER={{ azerothcore_compiler }} -DCMAKE_CXX_COMPILER={{ azerothcore_compiler_xx }} -DWITH_WARNINGS=1 -DTOOLS_BUILD={{ azerothcore_tools }} -DSCRIPTS=static -DENABLE_EXTRAS={{ azerothcore_debug }} -DENABLE_EXTRA_LOGS={{ azerothcore_debug }}'
-
-- name: Configure before compiling
-  shell: cd "/home/{{ azerothcore_user }}/{{ azerothcore_folder }}/{{ azerothcore_source }}/build" && cmake ../ -DCMAKE_INSTALL_PREFIX="/home/{{ azerothcore_user }}/{{ azerothcore_folder }}/{{ azerothcore_server_release }}" -DCMAKE_C_COMPILER={{ azerothcore_compiler }} -DCMAKE_CXX_COMPILER={{ azerothcore_compiler_xx }} -DWITH_WARNINGS=1 -DTOOLS_BUILD={{ azerothcore_tools }} -DSCRIPTS=static -DMODULES_STATIC=static -DENABLE_EXTRAS={{ azerothcore_debug }} -DENABLE_EXTRA_LOGS={{ azerothcore_debug }}
-  become_user: "{{ azerothcore_user }}"
-
-- name: Compile AzerothCore server
-  shell: cd "/home/{{ azerothcore_user }}/{{ azerothcore_folder }}/{{ azerothcore_source }}/build" && make -j $(nproc)
-  become_user: "{{ azerothcore_user }}"
-
-- name: Install AzerothCore server
-  shell: cd "/home/{{ azerothcore_user }}/{{ azerothcore_folder }}/{{ azerothcore_source }}/build" && make install
-  become_user: "{{ azerothcore_user }}"
+- name: Run our compile script
+  shell: "./compile.sh > compile.log"
+  args:
+    chdir: "{{ home }}/{{ azerothcore_folder }}/"
+  tags:
+    - build

@@ -1,0 +1,14 @@
+---
+
+- hosts: all
+  become: no
+
+  pre_tasks:
+    - name: Get the AzerothCore source on disk before we do anything
+      import_role:
+        name: azerothcore
+        tasks_from: source
+
+  roles:
+    - role: azerothcore-database
+    - role: azerothcore

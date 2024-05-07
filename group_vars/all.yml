@@ -1,23 +1,21 @@
 ---
-# Ansible log
-ansible_log_date_format: "%Y-%m-%d %H:%M"
-ansible_log_file: "/var/log/ansible_roles.log"
 
-# Unpriviliged user that AzerothCore will run as - everything will be placed in the home of this user
-# /home/{{ azerothcore }}/
-azerothcore_user: "azerothcore"
-# The password hash below is for 'azerothcore' and  is obviously not a safe password - modify it accordingly.
-# You can generate a new hash using: mkpasswd --method=SHA-512 --stdin your_password_here
-azerothcore_user_password: "$6$sWb.Lkqrq2SAGW$1I9qFUUnadQkOjigb6SKfrYEs2oegbm1kFVnTg0ZiRTNLhzV1NSz0jYDZYr4tpfGtc0jFKrzgZQoEjpyRprAW."
+# $HOME
+home: "{{ lookup('env', 'HOME') }}"
 
-# content folder - /home/{{ azerothcore }}/{{ azerothcore_folder }}, this is optional and can be left blank
+# realmlist - the address of where your server runs and the name for it
+azerothcore_realmlist_name: "My Realm" 
+azerothcore_realmlist_ip: "127.0.0.1" # world server binds to this
+azerothcore_realmlist_local_ip: "127.0.0.1"
+azerothcore_realmlist_port: "8085" # world server binds to this
+azerothcore_realmlist_auth_port: "3724" # world server binds to this
+azerothcore_realmlist_id: "1" # world server binds to this
+
+# content folder - {{ home }}/{{ azerothcore_folder }}, this is optional and can be left blank
 # to create folders in the home-dir directly. Or it can be multiple folders.
 azerothcore_folder: "azerothcore-wotlk"
 
-# game client - "/home/{{ azerothcore_user }}/{{ azerothcore_folder }}/{{ azerothcore_wow_client }}"
-azerothcore_wow_client: "client"
-
-# source code - "/home/{{ azerothcore_user }}/{{ azerothcore_folder }}/{{ azerothcore_source }}"
+# Where the source code is downloaded to
 azerothcore_source: "source"
 
 # Server folder name - this will be used for the symlink to the current live version
@@ -25,8 +23,10 @@ azerothcore_source: "source"
 azerothcore_server: "acore"
 
 # database information - for now only tested using "localhost"
-azerothcore_db_user: "azerothcore"
 azerothcore_db_server: "localhost"
+azerothcore_db_port: "3306"
+azerothcore_db_user: "azerothcore"
+# TODO: we should be using Ansible vault here
 azerothcore_db_password: "azerothcore"
 
 # the 3 databases used
@@ -34,10 +34,6 @@ azerothcore_db_characters: "acore_characters"
 azerothcore_db_auth: "acore_auth"
 azerothcore_db_world: "acore_world"
 
-# realmlist - the address of where your server runs and the name for it
-azerothcore_realmlist_ip: "127.0.0.1"
-azerothcore_realmlist_local_ip: "127.0.0.1"
-azerothcore_realmlist_name: "My Realm" 
 
 # enable server as a service (systemd), value can be "enable" or "disable"
 azerothcore_service: "enable"
@@ -50,6 +46,7 @@ azerothcore_git_force: "yes"
 
 # the build to check out from Git
 azerothcore_branch: "master"
+azerothcore_server_release: "{{azerothcore_branch}}"
 
 # compile tools (map-extraction etc.), '1' (true) or '0' (false)
 azerothcore_tools: "1"

@@ -1,0 +1,6 @@
+---
+
+- hosts: all
+  become: no
+  roles:
+    - azerothcore-database

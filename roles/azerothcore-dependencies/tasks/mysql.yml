@@ -1,0 +1,14 @@
+---
+
+- name: Upload our temp SQL file
+  template:
+    src: dba.sql
+    dest: /tmp/dba.sql
+
+- name: Run a raw mysql command
+  shell: "mysql -u root < /tmp/dba.sql"
+
+- name: Now delete the SQL file as we don't need it laying around
+  file:
+    path: /tmp/dba.sql
+    state: absent

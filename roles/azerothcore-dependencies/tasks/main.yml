@@ -1,0 +1,13 @@
+---
+
+- name: Update packages and install dependencies
+  include_tasks: "tasks/packages.yml"
+  tags:
+    - packages
+
+- name: Setup MySQL with our suer
+  include_tasks: "tasks/mysql.yml"
+  tags:
+    - mysql
+
+

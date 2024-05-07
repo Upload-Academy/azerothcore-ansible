@@ -1,20 +1,13 @@
 [Unit]
-Description=AzerothCore World Server
+Description=AzerothCore 3.3.5a World Server
+After=network.target
 
 [Service]
-Type=forking
-WorkingDirectory=/home/{{ azerothcore_user }}/{{ azerothcore_folder }}/{{ azerothcore_server }}/bin
-User={{ azerothcore_user }}
-
-ExecStart=/usr/bin/screen -dmS worldserver /home/{{ azerothcore_user }}/{{ azerothcore_folder }}/{{ azerothcore_server }}/bin/worldserver
-
-ExecReload=/usr/bin/screen -S worldserver -p 0 -X stuff "server shutdown force 0\\r"; /usr/bin/screen -dmS worldserver /home/{{ azerothcore_user }}/{{ azerothcore_folder }}/{{ azerothcore_server }}/bin/worldserver
-
-ExecStop=/usr/bin/screen -S worldserver -p 0 -X stuff "server shutdown force 0\\r"
-RestartSec=10s
-
-Restart=always
-
+PrivateTmp=true
+Type=simple
+PIDFile=/run/azerothcore/worldserver.pid
+WorkingDirectory={{ home }}/{{ azerothcore_folder }}/{{ azerothcore_server_release }}/bin/
+ExecStart={{ home }}/{{ azerothcore_folder }}/{{ azerothcore_server_release }}/bin/worldserver
 
 [Install]
 WantedBy=multi-user.target

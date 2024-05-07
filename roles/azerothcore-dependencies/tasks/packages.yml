@@ -1,0 +1,20 @@
+---
+
+- name: Install package dependancies
+  apt:
+    name:
+      - git
+      - cmake
+      - make
+      - gcc
+      - g++
+      - clang
+      - libmysqlclient-dev
+      - libssl-dev
+      - libbz2-dev
+      - libreadline-dev
+      - libncurses-dev
+      - mysql-server
+      - libboost-all-dev
+      - libstdc++-12-dev # required but not listed on AzerothCore website
+  when: ansible_os_family == 'Debian'
