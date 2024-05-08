@@ -2,7 +2,7 @@
 
 # AzerothCore Ansible
 
-This repository uses [Ansible](https://ansible.com/) to set up and run [AzerothCore](https://github.com/azerothcore/azerothcore-wotlk) - a World of Warcraft 3.3.5a (Wrath of the Lichking) framework - on a [Ubuntu 22.04 server](https://ubuntu.com/server). It does not (officially) support other Linux distributions.
+This repository uses [Ansible](https://ansible.com/) to set up and run [AzerothCore](https://github.com/azerothcore/azerothcore-wotlk) - a World of Warcraft 3.3.5a (Wrath of the Lich King) framework - on a [Ubuntu 22.04 server](https://ubuntu.com/server). It does not (officially) support other Linux distributions.
 
 This project is designed to help you continue the educational spirit of AzerothCore and take advantage of its work, **not** host public facing World of Warcraft servers.
 
