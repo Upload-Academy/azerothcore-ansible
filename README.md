@@ -9,9 +9,9 @@ This project is designed to help you continue the educational spirit of AzerothC
 ## Notes
 
 - This is not a tool for beginners - you are expected to be able to use the command line and have some prerequisite knowledge;
-- You do not run AzerothCore has the `root` user, nor do you run it as a user with access to `root` privileges: via `su` or `sudo` -- it's simply **not** required;
+- You do not run AzerothCore as the `root` user, nor do you run it as a user with access to `root` privileges: via `su` or `sudo` -- it's simply **not** required;
 - You _do not_ need to provide the World of Warcraft client. This repository also **does not** contain the client;
-- We **cannot** (and **will not**) help you obtain the World of Warcraft client;
+- We **cannot** (and **will not**) help you obtain the World of Warcraft client (nor will the AzerothCore team);
 - This series of Ansible Roles only supports operating AzerothCore **on Linux** - Windows hosts are not supported;
 
 ## Original Author
