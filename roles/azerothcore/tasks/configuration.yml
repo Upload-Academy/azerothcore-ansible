@@ -7,6 +7,8 @@
   file:
     path: "{{ home }}/{{ azerothcore_folder }}/{{ azerothcore_server_release }}/log"
     state: "directory"
+  tags:
+    - configuration
 
 - name: Parse and upload the configuration files
   template:
@@ -16,6 +18,8 @@
     - worldserver
     - authserver
     - dbimport
+  tags:
+    - configuration
 
 #####################
 # Existing configuration files

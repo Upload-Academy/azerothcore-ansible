@@ -1,21 +1,26 @@
 ---
 
+- name: Create a temp directory that'll get used a lot down the line
+  file:
+    path: "{{ temp }}"
+    state: directory
+
 # Creates the base databases
 - name: Upload our temp SQL file
   template:
     src: init.sql
-    dest: /tmp/init.sql
+    dest: "{{ temp }}/init.sql"
   tags:
    - database-init
 
 - name: Run a raw mysql commands to bootstrap the server
-  shell: "mysql -u {{azerothcore_db_user}} --password={{azerothcore_db_password}} < /tmp/init.sql"
+  shell: "mysql -u {{azerothcore_db_user}} --password={{azerothcore_db_password}} < {{ temp }}/init.sql"
   tags:
    - database-init
 
 - name: Now delete the SQL file as we don't need it laying around
   file:
-    path: /tmp/init.sql
+    path: "{{ temp }}/init.sql"
     state: absent
   tags:
    - database-init

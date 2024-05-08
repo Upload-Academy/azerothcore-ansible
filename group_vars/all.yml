@@ -1,7 +1,12 @@
 ---
 
+# content folder - {{ home }}/{{ azerothcore_folder }}, this is optional and can be left blank
+# to create folders in the home-dir directly. Or it can be multiple folders.
+azerothcore_folder: "azerothcore-wotlk"
+
 # $HOME
-home: "{{ lookup('env', 'HOME') }}"
+home: "{{ ansible_env.HOME }}"
+temp: "{{ home }}/{{ azerothcore_folder }}/temp"
 
 # realmlist - the address of where your server runs and the name for it
 azerothcore_realmlist_name: "My Realm" 
@@ -11,9 +16,6 @@ azerothcore_realmlist_port: "8085" # world server binds to this
 azerothcore_realmlist_auth_port: "3724" # world server binds to this
 azerothcore_realmlist_id: "1" # world server binds to this
 
-# content folder - {{ home }}/{{ azerothcore_folder }}, this is optional and can be left blank
-# to create folders in the home-dir directly. Or it can be multiple folders.
-azerothcore_folder: "azerothcore-wotlk"
 
 # Where the source code is downloaded to
 azerothcore_source: "source"

@@ -1,23 +1,45 @@
 ---
 
+- name: Find all of the db_auth core SQL files
+  find:
+    paths:
+      - "{{ home }}/{{ azerothcore_folder }}/source/data/sql/base/db_auth/"
+    patterns:
+      - "*.sql"
+    file_type: file
+  register: db_auth_sql_files
+
+- name: Find all of the db_world core SQL files
+  find:
+    paths:
+      - "{{ home }}/{{ azerothcore_folder }}/source/data/sql/base/db_world/"
+    patterns:
+      - "*.sql"
+  register: db_world_sql_files
+
+- name: Find all of the db_characters core SQL files
+  find:
+    paths:
+      - "{{ home }}/{{ azerothcore_folder }}/source/data/sql/base/db_characters/"
+    patterns:
+      - "*.sql"
+  register: db_characters_sql_files
+
 # Core database tables for everything
 - name: Find and run the base AzerothCore SQL files - db_auth
-  shell: "mysql -u {{azerothcore_db_user}} --password={{azerothcore_db_password}} acore_auth < {{ item }}"
-  with_fileglob:
-    - "{{ home }}/{{ azerothcore_folder }}/source/data/sql/base/db_auth/*.sql"
+  shell: "mysql -u {{azerothcore_db_user}} --password={{azerothcore_db_password}} acore_auth < {{ item.path }}"
+  with_items: "{{ db_auth_sql_files.files }}"
   tags:
     - database-core
 
 - name: Find and run the base AzerothCore SQL files - db_world
-  shell: "mysql -u {{azerothcore_db_user}} --password={{azerothcore_db_password}} acore_world < {{ item }}"
-  with_fileglob:
-    - "{{ home }}/{{ azerothcore_folder }}/source/data/sql/base/db_world/*.sql"
+  shell: "mysql -u {{azerothcore_db_user}} --password={{azerothcore_db_password}} acore_world < {{ item.path }}"
+  with_items: "{{ db_world_sql_files.files }}"
   tags:
     - database-core
 
 - name: Find and run the base AzerothCore SQL files - db_characters
-  shell: "mysql -u {{azerothcore_db_user}} --password={{azerothcore_db_password}} acore_characters < {{ item }}"
-  with_fileglob:
-    - "{{ home }}/{{ azerothcore_folder }}/source/data/sql/base/db_characters/*.sql"
+  shell: "mysql -u {{azerothcore_db_user}} --password={{azerothcore_db_password}} acore_characters < {{ item.path }}"
+  with_items: "{{ db_characters_sql_files.files }}"
   tags:
     - database-core
