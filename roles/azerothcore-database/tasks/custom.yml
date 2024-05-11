@@ -1,21 +1,6 @@
 ---
 
-# Update realm list
-- name: Upload our temp SQL file
-  template:
-    src: auth_custom.sql
-    dest: "{{ temp }}/auth_custom.sql"
-  tags:
-    - database-custom
-
-- name: Update the realm list with our server
-  shell: "mysql -u {{azerothcore_db_user}} --password={{azerothcore_db_password}} acore_auth < {{ temp }}/auth_custom.sql"
-  tags:
-    - database-custom
-
-- name: Now delete the SQL file as we don't need it laying around
-  file:
-    path: "{{ temp }}/auth_custom.sql"
-    state: absent
+- name: Run our custom/ad-hoc SQL file
+  shell: "mysql -u {{azerothcore_db_user}} --password={{azerothcore_db_password}} acore_auth < {{ temp }}/adhoc.sql"
   tags:
     - database-custom

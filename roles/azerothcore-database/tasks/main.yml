@@ -8,7 +8,7 @@
   tags:
     - database-core
 
-- include_tasks: tasks/realmlist_update.yml
+- include_tasks: tasks/realmlist.yml
   tags:
     - database-realmlist
 
