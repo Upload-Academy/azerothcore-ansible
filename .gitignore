@@ -1,2 +1,2 @@
 # Specific files/folders to ignore
-group_vars/all
+venv/
