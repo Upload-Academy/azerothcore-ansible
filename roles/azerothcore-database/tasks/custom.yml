@@ -1,6 +1,6 @@
 ---
 
 - name: Run our custom/ad-hoc SQL file
-  shell: "mysql -u {{azerothcore_db_user}} --password={{azerothcore_db_password}} acore_auth < {{ sql_dir }}/adhoc.sql"
+  shell: "mysql -u {{azerothcore_db_user}} --password={{azerothcore_db_password}} acore_auth < {{ sql_dir }}/custom.sql"
   tags:
     - database-custom
