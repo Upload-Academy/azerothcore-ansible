@@ -8,6 +8,8 @@
       - "*.sql"
     file_type: file
   register: db_auth_sql_files
+  tags:
+    - database-core
 
 - name: Find all of the db_world core SQL files
   find:
@@ -16,6 +18,8 @@
     patterns:
       - "*.sql"
   register: db_world_sql_files
+  tags:
+    - database-core
 
 - name: Find all of the db_characters core SQL files
   find:
@@ -24,6 +28,8 @@
     patterns:
       - "*.sql"
   register: db_characters_sql_files
+  tags:
+    - database-core
 
 # Core database tables for everything
 - name: Find and run the base AzerothCore SQL files - db_auth

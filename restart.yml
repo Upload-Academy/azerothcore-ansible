@@ -1,0 +1,20 @@
+---
+
+- hosts: target
+  become: no
+  tasks: 
+    - name: Restart the World Server
+      systemd_service:
+        name: worldserver
+        state: restarted
+        scope: user 
+      tags:
+        - worldserver
+    
+    - name: Restart the Auth Server
+      systemd_service:
+        name: authserver
+        state: restarted
+        scope: user 
+      tags:
+        - authserver

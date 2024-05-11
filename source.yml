@@ -1,0 +1,18 @@
+---
+
+- hosts: all
+  become: no
+
+  vars_prompt:
+    - name: azerothcore_realmlist_ip
+      prompt: What is the IP address you want AzerothCore to use?
+      private: false
+
+  pre_tasks:
+    - name: Get the AzerothCore source on disk before we do anything
+      import_role:
+        name: azerothcore
+        tasks_from: source
+
+  roles:
+    - role: azerothcore

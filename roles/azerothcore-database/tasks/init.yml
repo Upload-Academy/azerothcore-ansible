@@ -1,26 +1,25 @@
 ---
 
-- name: Create a temp directory that'll get used a lot down the line
+- name: Create the database directory
   file:
-    path: "{{ temp }}"
+    path: "{{ sql_dir }}"
     state: directory
+  tags:
+   - database-init
 
 # Creates the base databases
-- name: Upload our temp SQL file
+- name: Upload our SQL files
   template:
-    src: init.sql
-    dest: "{{ temp }}/init.sql"
+    src: "{{ item }}"
+    dest: "{{ sql_dir }}/{{ item }}"
+  loop:
+    - init.sql
+    - adhoc.sql
+    - realmlist_update.sql
   tags:
    - database-init
 
 - name: Run a raw mysql commands to bootstrap the server
-  shell: "mysql -u {{azerothcore_db_user}} --password={{azerothcore_db_password}} < {{ temp }}/init.sql"
-  tags:
-   - database-init
-
-- name: Now delete the SQL file as we don't need it laying around
-  file:
-    path: "{{ temp }}/init.sql"
-    state: absent
+  shell: "mysql -u {{azerothcore_db_user}} --password={{azerothcore_db_password}} < {{ sql_dir }}/init.sql"
   tags:
    - database-init

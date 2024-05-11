@@ -8,6 +8,10 @@
   tags:
     - database-core
 
+- include_tasks: tasks/realmlist_update.yml
+  tags:
+    - database-realmlist
+
 - include_tasks: tasks/custom.yml
   tags:
     - database-custom
