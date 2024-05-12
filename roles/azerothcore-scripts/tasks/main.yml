@@ -3,7 +3,7 @@
 - name: Copy all LUA script into place and restart the server
   copy:
     src: "scripts/{{ item }}"
-    dest: "{{ root }}/bin/lua_scripts"
+    dest: "{{ root }}/bin/lua_scripts/{{ item }}"
   loop: "{{ azerothcore_scripts }}"
 
 - name: Restart the World Server
