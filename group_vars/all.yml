@@ -6,7 +6,7 @@ azerothcore_folder: "azerothcore-wotlk"
 
 # $HOME
 home: "{{ ansible_env.HOME }}"
-root: "{{ home }}/{{ azerothcore_folder }}/"
+root: "{{ home }}/{{ azerothcore_folder }}/{{ azerothcore_source }}"
 temp: "{{ home }}/{{ azerothcore_folder }}/temp"
 sql_dir: "{{ home }}/{{ azerothcore_folder }}/sql"
 
