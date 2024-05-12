@@ -2,7 +2,7 @@
 
 - name: Copy all LUA script into place and restart the server
   copy:
-    src: "{{ item }}"
+    src: "scripts/{{ item }}"
     dest: "{{ root }}/bin/lua_scripts"
   loop: "{{ azerothcore_scripts }}"
 
