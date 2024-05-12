@@ -14,7 +14,7 @@
     dest: "{{ sql_dir }}/{{ item }}"
   loop:
     - init.sql
-    - adhoc.sql
+    - custom.sql
     - realmlist_update.sql
   tags:
    - database-init
