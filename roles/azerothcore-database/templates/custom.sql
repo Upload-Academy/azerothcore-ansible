@@ -1,8 +1,13 @@
--- Creates a `GM_MASTER` user with the password `badpassword`
+-- Creates a `root` user with the password `badpassword`
 -- This GM account is level 3, so complete control. It should
 -- have its password changed completely. More ideally, the whole
 -- account should be deleted and a new one created after the
 -- server has been tested and goes into production.
+
+USE acore_auth;
+
+DELETE FROM `account` WHERE id = 1;
+DELETE FROM `account_access` WHERE id = 1;
 
 INSERT INTO `account` (
     `id`,
