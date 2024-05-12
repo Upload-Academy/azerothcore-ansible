@@ -1,0 +1,13 @@
+---
+
+- name: Copy all LUA script into place and restart the server
+  copy:
+    src: "{{ item }}"
+    dest: "{{ root }}/bin/lua_scripts"
+  loop: "{{ azerothcore_scripts }}"
+
+- name: Restart the World Server
+  systemd_service:
+    name: worldserver
+    state: restarted
+    scope: user

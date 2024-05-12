@@ -147,3 +147,32 @@ Now you have a private Wrath of the Lich King server...
 - There's no support for setting up multiple world server, but I'll add the ability to launch a PTR server soon
 - I want to add the feature to download a pre-compiled binary (which I'll eventually provide) instead of the source and compiling everything
 - Docker support will never be added as it's pointless for this and there's work being done there anyway
+
+## Workflows
+
+There are going to be times when you'll need to make changes to your AzerothCore and then have everything update. These are going to be referred to as "workflows". I've documented several workflows, below.
+
+### Change the server's IP
+
+If you were running the server from `127.0.0.1` (your local system) and now you want to open it up to the world, then you'll need to change the IPs in the configuration, in the database, and then restart the `authserver` and the `worldserver`.
+
+To achieve this, it's recommend you do the following:
+
+1. Edit the `group_vars/all.yml` file and update `azerothcore_realmlist_ip` to the new (public) IP
+1. Execute `ansible-playbook all.yml --user=azerothcore -i <server IP>, --tags configuration,database-init,database-realmlist`
+1. Execute `ansible-playbook restart.yml --user=azerothcore -i <serber IP>,`
+
+Your AzerothCore `authserver` and `worldserver` processes should now be listening on the new IP.
+
+### Add a modle to your core
+
+If you want to recompile your code to use a new module, then the following workflow is required. This is an advanced workflow:
+
+1. SSH to your server;
+1. Navigate to the `azerothcore_folder` location (probably: `cd ~/azerothcore-wotlk`)
+1. Navigate to `source/modules`
+1. Copy/clone the module to the current directory
+1. Close the SSH session
+1. Execute: `ansible-playbook all.yml --user=azerothcore -i <server IP>, --tags source,build`
+
+This isn't all, however. Some modules require that you patch the core. Some require database changes that may or may not be automatically handled by AzerothCore's compilation process. In some cases the above might not be enough... no one said this was going to be easy :-)

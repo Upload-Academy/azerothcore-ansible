@@ -1,9 +1,5 @@
 ---
 
-#####################
-# Source code and build
-#####################
-
 - name: Include task for downloading the AzerothCore source
   include_tasks: "tasks/source.yml"
   tags:
@@ -14,45 +10,25 @@
   tags:
     - build
 
-#####################
-# Handle maps
-#####################
-
 - name: Include task for maps
   include_tasks: "tasks/maps.yml"
   tags:
     - maps
-
-#####################
-# Configuration files
-#####################
 
 - name: Include task for configuration
   include_tasks: "tasks/configuration.yml"
   tags:
     - configuration
 
-#####################
-# systemd
-#####################
-
 - name: Include task for systemd
   include_tasks: "tasks/systemd.yml"
   tags:
     - systemd
 
-#####################
-# Database
-#####################
-
 # - name: Include task for database
 #   include_tasks: "tasks/database.yml"
 #   tags:
 #     - database
-
-#####################
-# Symlink new build
-#####################
 
 # Ownership doesn't seem to work?
 # - name: Update symlink to the latest release
@@ -63,10 +39,6 @@
 #     owner: "{{ azerothcore_user }}"
 #     group: "{{ azerothcore_user }}"
 
-#####################
-# Start new server
-#####################
-
 # - name: Start world- and authserver
 #   systemd:
 #     state: started
@@ -76,10 +48,6 @@
 #   with_items:
 #     - "worldserver"
 #     - "authserver"
-
-#####################
-# Setup backup
-#####################
 
 # - name: Setup backup using cron
 #   cron:

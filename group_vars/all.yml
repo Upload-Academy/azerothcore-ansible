@@ -6,6 +6,7 @@ azerothcore_folder: "azerothcore-wotlk"
 
 # $HOME
 home: "{{ ansible_env.HOME }}"
+root: "{{ home }}/{{ azerothcore_folder }}/"
 temp: "{{ home }}/{{ azerothcore_folder }}/temp"
 sql_dir: "{{ home }}/{{ azerothcore_folder }}/sql"
 
@@ -64,3 +65,11 @@ azerothcore_compiler_xx: "/usr/bin/clang++"
 # cronjob for backup, multiple values can be listed such as "3,5,12" etc., leave empty to not setup backup
 azerothcore_cron_minute: "0"
 azerothcore_cron_hour: "7"
+
+# Modules you want Ansible to download for you
+azerothcore_modules: []
+
+# The Eluna LUA scripts you want to copy up
+# These must be present at ./files/
+azerothcore_scripts:
+  - chicken.lua
