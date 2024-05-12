@@ -1,8 +1,8 @@
-local npcId = 40000
+local npcId = 40001
 local haveHealed = false
-local personalSpell = 15744
+local personalSpell = 70286
 local personalHeal = 635
-local personalMessage = "i pec u!!"
+local personalMessage = "nibble nibble"
 
 local function CastPersonalSpell(eventId, dely, calls, creature)
     creature:CastSpell(creature:GetVictim(), personalSpell, true)
