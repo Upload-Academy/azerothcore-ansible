@@ -67,9 +67,12 @@ azerothcore_cron_minute: "0"
 azerothcore_cron_hour: "7"
 
 # Modules you want Ansible to download for you
-azerothcore_modules: []
+azerothcore_modules:
+  - 
 
 # The Eluna LUA scripts you want to copy up
 # These must be present at ./files/
 azerothcore_scripts:
-  - chicken.lua
+  - crazy_chickens/chicken.lua
+  - crazy_chickens/magic_chicken.lua
+  - crazy_chickens/cat.lua
