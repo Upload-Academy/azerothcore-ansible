@@ -34,5 +34,4 @@ end
 
 RegisterCreatureEvent(npcId, 1, OnEnterCombat)
 RegisterCreatureEvent(npcId, 2, OnLeaveCombat)
-RegisterCreatureEvent(npcId, 4, OnDied)
 RegisterCreatureEvent(npcId, 9, OnDamageTaken)
