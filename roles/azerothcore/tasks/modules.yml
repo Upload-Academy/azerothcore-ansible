@@ -3,9 +3,9 @@
 # TODO
 - name: Fetch and download our desired modules
   git:
-    repo: "{{ item }}"
-    dest: "{{ home }}/{{ azerothcore_folder }}/{{ azerothcore_source }}/modules"
-    version: "{{ azerothcore_branch }}"
+    repo: "{{ item.git }}"
+    dest: "{{ home }}/{{ azerothcore_folder }}/{{ azerothcore_source }}/modules/{{ item.name }}"
+    version: "{{ item.version }}"
     force: yes
   loop: "{{ azerothcore_modules }}"
   tags:
