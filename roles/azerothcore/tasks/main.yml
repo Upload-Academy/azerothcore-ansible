@@ -5,6 +5,11 @@
   tags:
     - source
 
+- name: Include task for downloading the AzerothCore modules
+  include_tasks: "tasks/modules.yml"
+  tags:
+    - modules
+
 - name: Include task for building
   include_tasks: "tasks/build.yml"
   tags:

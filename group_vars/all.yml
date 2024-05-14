@@ -67,8 +67,9 @@ azerothcore_cron_minute: "0"
 azerothcore_cron_hour: "7"
 
 # Modules you want Ansible to download for you
+# Use the https:// clone link, not the git:// one
 azerothcore_modules:
-  - 
+  - https://github.com/Upload-Academy/azerothcore-module-wos.git
 
 # The Eluna LUA scripts you want to copy up
 # These must be present at ./files/

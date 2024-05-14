@@ -1,3 +1,12 @@
 ---
 
 # TODO
+- name: Fetch and download our desired modules
+  git:
+    repo: "{{ item }}"
+    dest: "{{ home }}/{{ azerothcore_folder }}/{{ azerothcore_source }}/modules"
+    version: "{{ azerothcore_branch }}"
+    force: yes
+  loop: "{{ azerothcore_modules }}"
+  tags:
+    - modules
