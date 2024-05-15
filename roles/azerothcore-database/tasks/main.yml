@@ -4,9 +4,9 @@
   tags:
     - database-init
 
-- include_tasks: tasks/core.yml
-  tags:
-    - database-core
+# - include_tasks: tasks/core.yml
+#   tags:
+#     - database-core
 
 - include_tasks: tasks/realmlist.yml
   tags:

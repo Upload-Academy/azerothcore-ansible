@@ -15,11 +15,11 @@
     - authserver
     - worldserver
 
-# Start services
+# Enable the services but keep them stopped: we have to update the database
 - name: Enable and start both services
   systemd_service:
     name: "{{ item }}"
-    state: started
+    state: stopped
     enabled: yes
     daemon_reexec: yes
     scope: user
