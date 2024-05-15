@@ -5,9 +5,12 @@
   tags:
     - packages
 
-- name: Setup MySQL with our suer
+- name: Set up our AzerothCore user
+  include_tasks: "tasks/user.yml"
+  tags:
+    - user
+
+- name: Setup MySQL with our user
   include_tasks: "tasks/mysql.yml"
   tags:
     - mysql
-
-

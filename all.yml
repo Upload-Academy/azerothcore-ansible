@@ -4,33 +4,38 @@
   become: no
 
   pre_tasks:
-    # - name: Get the AzerothCore source on disk before we do anything
-    #   import_role:
-    #     name: azerothcore
-    #     tasks_from: source
-    - name: Get the AzerothCore source on disk before we do anything
+    - name: Ensure all target directories are set up on the remote server
+      file:
+        path: "{{ item }}"
+        state: directory
+      loop:
+        - "{{ temp }}"
+        - "{{ sql_dir }}"
+
+    - name: Set up the base database
       import_role:
         name: azerothcore-database
         tasks_from: init
 
   roles:
     - role: azerothcore
+    - role: azerothcore-database
   
   post_tasks:
-    - name: Update the realmlist database with our realm data
-      import_role:
-        name: azerothcore-database
-        tasks_from: realmlist
+    # - name: Update the realmlist database with our realm data
+    #   import_role:
+    #     name: azerothcore-database
+    #     tasks_from: realmlist
     
-    - name: Run any custom SQL
-      import_role:
-        name: azerothcore-database
-        tasks_from: custom
+    # - name: Run any custom SQL
+    #   import_role:
+    #     name: azerothcore-database
+    #     tasks_from: custom
     
     - name: Start the services
       systemd_service:
         name: "{{ item }}"
-        state: started
+        state: restarted
         scope: user
       loop:
         - authserver

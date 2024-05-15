@@ -1,6 +1,6 @@
 ---
 
-- hosts: target
+- hosts: all
   become: no
   tasks: 
     - name: Restart the World Server

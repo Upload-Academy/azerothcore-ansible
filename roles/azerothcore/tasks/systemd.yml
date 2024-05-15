@@ -5,6 +5,8 @@
   file:
     path: "{{ home }}/.config/systemd/user"
     state: directory
+  tags:
+    - systemd
 
 # Upload our config files
 - name: Parse and upload our unit files
@@ -14,9 +16,11 @@
   loop:
     - authserver
     - worldserver
+  tags:
+    - systemd
 
 # Enable the services but keep them stopped: we have to update the database
-- name: Enable and start both services
+- name: Enable and STOP both services
   systemd_service:
     name: "{{ item }}"
     state: stopped
@@ -26,3 +30,5 @@
   loop:
     - authserver
     - worldserver
+  tags:
+    - systemd

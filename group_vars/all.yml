@@ -68,4 +68,7 @@ azerothcore_cron_hour: "7"
 
 # Modules you want Ansible to download for you
 # Use the https:// clone link, not the git:// one
-azerothcore_modules: []
+azerothcore_modules:
+  - name: mod-eluna
+    git: https://github.com/azerothcore/mod-eluna.git
+    version: master

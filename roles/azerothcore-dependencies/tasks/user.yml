@@ -1,0 +1,13 @@
+---
+
+- name: Create the AzerothCore user
+  user:
+    name: azerothcore
+
+- name: Copy the root user's SSH key over
+  copy:
+    remote_src: yes
+    src: /root/.ssh
+    dest: /home/azerothcore/
+    owner: azerothcore
+    group: azerothcore

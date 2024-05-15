@@ -5,7 +5,7 @@ After=network.target
 [Service]
 PrivateTmp=true
 Type=simple
-PIDFile=/run/azerothcore/authserver.pid
+PIDFile={{ home }}/{{ azerothcore_folder }}/temp/authserver.pid
 WorkingDirectory={{ home }}/{{ azerothcore_folder }}/{{ azerothcore_server_release }}/bin/
 ExecStart={{ home }}/{{ azerothcore_folder }}/{{ azerothcore_server_release }}/bin/authserver
 
