@@ -17,12 +17,15 @@
     - role: azerothcore
   
   post_tasks:
-    - name: Get the AzerothCore source on disk before we do anything
+    - name: Update the realmlist database with our realm data
       import_role:
         name: azerothcore-database
-        tasks_from:
-          - realmlist
-          - custom
+        tasks_from: realmlist
+    
+    - name: Run any custom SQL
+      import_role:
+        name: azerothcore-database
+        tasks_from: custom
     
     - name: Start the services
       systemd_service:
