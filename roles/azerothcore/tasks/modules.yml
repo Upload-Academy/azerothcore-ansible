@@ -1,6 +1,5 @@
 ---
 
-# TODO
 - name: Fetch and download our desired modules
   git:
     repo: "{{ item.git }}"
@@ -8,5 +7,32 @@
     version: "{{ item.version }}"
     force: yes
   loop: "{{ azerothcore_modules }}"
+  tags:
+    - modules
+
+- name: Look for LUA scripts to copy
+  find:
+    paths:
+      - "{{ home }}/{{ azerothcore_folder }}/{{ azerothcore_source }}/modules/"
+    patterns:
+      - "*.lua"
+    recurse: true
+    depth: 3
+  register: lua_scripts
+  tags:
+    - modules
+  
+- debug:
+    msg: "{{ lua_scripts.files }}"
+  tags:
+    - modules
+
+- name: Copy them across to our final destination
+  copy:
+    remote_src: yes
+    src: "{{ item.path }}"
+    dest: "{{ root }}/bin/lua_scripts"
+  loop: "{{ lua_scripts.files }}"
+  when: lua_scripts.matched > 0
   tags:
     - modules

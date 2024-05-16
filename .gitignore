@@ -1,2 +1,4 @@
 # Specific files/folders to ignore
 venv/
+develop.txt
+group_vars/develop.yml

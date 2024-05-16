@@ -141,6 +141,10 @@ Now you have a private Wrath of the Lich King server...
 
 ![WotLK GM On](static/images/gm-on.jpg)
 
+## Special Functionality
+
+* The `roles/azerothcore` Role will look for `*.lua` files under `$SOURCE/modules/*/lua_scripts/` after it has downloaded/cloned any modules you requested via `azerothcore_modules`. If it finds any it will copy them to `$INSTALL_DIR/bin/lua_scripts`
+
 ## _Missing_ Features
 
 - I disabled the database backup features of the original code as I believe that something that should be done outside of Ansible (but it can be managed by Ansible)
