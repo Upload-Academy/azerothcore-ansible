@@ -21,11 +21,6 @@
   register: lua_scripts
   tags:
     - modules
-  
-- debug:
-    msg: "{{ lua_scripts.files }}"
-  tags:
-    - modules
 
 - name: Copy them across to our final destination
   copy:
