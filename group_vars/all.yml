@@ -41,6 +41,8 @@ azerothcore_db_world: "acore_world"
 
 # enable server as a service (systemd), value can be "enable" or "disable"
 azerothcore_service: "enable"
+azerothcore_service_user: "azerothcore"
+azerothcore_service_group: "azerothcore"
 
 # where to get the source code from
 azerothcore_git: "https://github.com/azerothcore/azerothcore-wotlk.git"

@@ -1,0 +1,64 @@
+---
+
+- hosts: all
+  become: no
+  vars_prompt:
+    - name: confirm_refresh_auth
+      prompt: "Are you ABSOLUETLY sure you want to DELETE/REFRESH the AUTH DB?"
+      private: no
+    
+    - name: confirm_refresh_world
+      prompt: "Are you ABSOLUETLY sure you want to DELETE/REFRESH the WORLD DB?"
+      private: no
+    
+    - name: confirm_refresh_characters
+      prompt: "Are you ABSOLUETLY sure you want to DELETE/REFRESH the CHARACTERS DB?"
+      private: no
+
+  tasks:
+
+    - name: Do a complete DB refresh for the AUTH DB
+      block:
+        - name: Find all of the db_auth core SQL files
+          find:
+            paths:
+              - "{{ home }}/{{ azerothcore_folder }}/source/data/sql/base/db_auth/"
+            patterns:
+              - "*.sql"
+            file_type: file
+          register: db_auth_sql_files
+
+        - name: Find and run the base AzerothCore SQL files - db_auth
+          shell: "mysql -u {{azerothcore_db_user}} --password={{azerothcore_db_password}} acore_auth < {{ item.path }}"
+          with_items: "{{ db_auth_sql_files.files }}"
+      when: confirm_refresh_auth | bool
+
+    - name: Do a complete DB refresh for the WORLD DB
+      block:
+        - name: Find all of the db_world core SQL files
+          find:
+            paths:
+              - "{{ home }}/{{ azerothcore_folder }}/source/data/sql/base/db_world/"
+            patterns:
+              - "*.sql"
+          register: db_world_sql_files
+
+        - name: Find and run the base AzerothCore SQL files - db_world
+          shell: "mysql -u {{azerothcore_db_user}} --password={{azerothcore_db_password}} acore_world < {{ item.path }}"
+          with_items: "{{ db_world_sql_files.files }}"
+      when: confirm_refresh_world | bool
+
+    - name: Do a complete DB refresh for the CHARACTERS DB
+      block:
+        - name: Find all of the db_characters core SQL files
+          find:
+            paths:
+              - "{{ home }}/{{ azerothcore_folder }}/source/data/sql/base/db_characters/"
+            patterns:
+              - "*.sql"
+          register: db_characters_sql_files
+
+        - name: Find and run the base AzerothCore SQL files - db_characters
+          shell: "mysql -u {{azerothcore_db_user}} --password={{azerothcore_db_password}} acore_characters < {{ item.path }}"
+          with_items: "{{ db_characters_sql_files.files }}"
+      when: confirm_refresh_characters | bool

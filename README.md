@@ -86,6 +86,14 @@ ansible-playbook dependencies.yml -i inventory.txt --user=root
 
 This will install everything you need to download, compile and run AzerothCore.
 
+If you don't have direct SSH access to the `root` user (good!), then you'll need to use a user with `sudo` access. If that user has a password and their `sudo` access is not password-less (also good), then you'll need to run the above command like this:
+
+```shell
+ansible-playbook dependencies.yml -i inventory.txt --user=<otheruser> --ask-become-pass
+```
+
+This will tell Ansible to prompt you for `<otheruser>`'s `sudo` password.
+
 ### 4. Get AzerothCore into place
 
 Now we use the `all.yml` Playbook to run everything needed to set up the database, AzerothCore, and everything else.
