@@ -2,18 +2,27 @@
 
 - name: Include task for downloading the AzerothCore source
   include_tasks: "tasks/source.yml"
+  when: azerothcore_deployment_type == 'source'
   tags:
     - source
 
 - name: Include task for downloading the AzerothCore modules
   include_tasks: "tasks/modules.yml"
+  when: azerothcore_deployment_type == 'source'
   tags:
     - modules
 
 - name: Include task for building
   include_tasks: "tasks/build.yml"
+  when: azerothcore_deployment_type == 'source'
   tags:
     - build
+
+- name: Include task for downloading binaries
+  include_tasks: "tasks/binary.yml"
+  when: azerothcore_deployment_type == 'binary'
+  tags:
+    - binary
 
 - name: Include task for maps
   include_tasks: "tasks/maps.yml"
@@ -24,11 +33,6 @@
   include_tasks: "tasks/configuration.yml"
   tags:
     - configuration
-
-- name: Include task for systemd
-  include_tasks: "tasks/systemd.yml"
-  tags:
-    - systemd
 
 # - name: Include task for database
 #   include_tasks: "tasks/database.yml"

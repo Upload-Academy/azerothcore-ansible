@@ -10,12 +10,12 @@
   tags:
     - configuration
 
-- name: Create config directories
-  file:
-    path: "{{ home }}/{{ azerothcore_folder }}/{{ azerothcore_server_release }}/bin/etc/modules"
-    state: directory
-  tags:
-    - configuration
+#- name: Create config directories
+#  file:
+#    path: "{{ home }}/{{ azerothcore_folder }}/{{ azerothcore_server_release }}/bin/etc/modules"
+#    state: directory
+#  tags:
+#    - configuration
 
 - name: Parse and upload the configuration files
   template:

@@ -3,7 +3,7 @@
 - name: Find all of the db_auth core SQL files
   find:
     paths:
-      - "{{ home }}/{{ azerothcore_folder }}/source/data/sql/base/db_auth/"
+      - "{{ root }}/{{ azerothcore_source_dest_dir }}/data/sql/base/db_auth/"
     patterns:
       - "*.sql"
     file_type: file
@@ -12,27 +12,27 @@
     - database-core
     - database-auth
 
-# - name: Find all of the db_world core SQL files
-#   find:
-#     paths:
-#       - "{{ home }}/{{ azerothcore_folder }}/source/data/sql/base/db_world/"
-#     patterns:
-#       - "*.sql"
-#   register: db_world_sql_files
-#   tags:
-#     - database-core
-#     - database-world
+- name: Find all of the db_world core SQL files
+  find:
+   paths:
+     - "{{ root }}/{{ azerothcore_source_dest_dir }}/data/sql/base/db_world/"
+   patterns:
+     - "*.sql"
+  register: db_world_sql_files
+  tags:
+   - database-core
+   - database-world
 
-# - name: Find all of the db_characters core SQL files
-#   find:
-#     paths:
-#       - "{{ home }}/{{ azerothcore_folder }}/source/data/sql/base/db_characters/"
-#     patterns:
-#       - "*.sql"
-#   register: db_characters_sql_files
-#   tags:
-#     - database-core
-#     - database-characters
+- name: Find all of the db_characters core SQL files
+  find:
+   paths:
+     - "{{ root }}/{{ azerothcore_source_dest_dir }}/data/sql/base/db_characters/"
+   patterns:
+     - "*.sql"
+  register: db_characters_sql_files
+  tags:
+   - database-core
+   - database-characters
 
 # Core database tables for everything
 - name: Find and run the base AzerothCore SQL files - db_auth
@@ -42,16 +42,16 @@
     - database-core
     - database-auth
 
-# - name: Find and run the base AzerothCore SQL files - db_world
-#   shell: "mysql -u {{azerothcore_db_user}} --password={{azerothcore_db_password}} acore_world < {{ item.path }}"
-#   with_items: "{{ db_world_sql_files.files }}"
-#   tags:
-#     - database-core
-#     - database-world
+- name: Find and run the base AzerothCore SQL files - db_world
+  shell: "mysql -u {{azerothcore_db_user}} --password={{azerothcore_db_password}} acore_world < {{ item.path }}"
+  with_items: "{{ db_world_sql_files.files }}"
+  tags:
+   - database-core
+   - database-world
 
-# - name: Find and run the base AzerothCore SQL files - db_characters
-#   shell: "mysql -u {{azerothcore_db_user}} --password={{azerothcore_db_password}} acore_characters < {{ item.path }}"
-#   with_items: "{{ db_characters_sql_files.files }}"
-#   tags:
-#     - database-core
-#     - database-characters
+- name: Find and run the base AzerothCore SQL files - db_characters
+  shell: "mysql -u {{azerothcore_db_user}} --password={{azerothcore_db_password}} acore_characters < {{ item.path }}"
+  with_items: "{{ db_characters_sql_files.files }}"
+  tags:
+   - database-core
+   - database-characters

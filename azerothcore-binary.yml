@@ -1,0 +1,25 @@
+---
+
+- hosts: all
+  become: no
+
+  pre_tasks:
+    - name: Ensure all target directories are set up on the remote server
+      file:
+        path: "{{ item }}"
+        state: directory
+      loop:
+        - "{{ temp }}"
+        - "{{ sql_dir }}"
+        - "{{ root }}/bin/lua_scripts"
+        - "{{ root }}/bin/etc"
+        - "{{ root }}/bin/etc/modules"
+
+    - name: Set up the databases - world, auth, characters
+      import_role:
+        name: azerothcore-database
+        tasks_from: init
+
+  roles:
+    - role: azerothcore-binary
+    - role: azerothcore-database

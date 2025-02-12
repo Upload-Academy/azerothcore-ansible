@@ -2,7 +2,7 @@
 
 - name: Upload our temp SQL file
   template:
-    src: dba.sql
+    src: sql/dba.sql
     dest: /tmp/dba.sql
 
 - name: Run a raw mysql command

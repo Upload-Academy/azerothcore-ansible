@@ -1,8 +1,29 @@
 ---
-
 # content folder - {{ home }}/{{ azerothcore_folder }}, this is optional and can be left blank
 # to create folders in the home-dir directly. Or it can be multiple folders.
-azerothcore_folder: "azerothcore-wotlk"
+azerothcore_folder: "azerothcore-wotlk-source"
+
+# Whether to use source code and compile
+# or pull pre-existing binaries instead
+# Values can be "binary" or "source"
+#
+# Use "binary" if you don't care about
+# compiling. This will save you a lot of
+# waiting time.
+#
+# "source" is very slow but allows you to
+#load custom modules.
+azerothcore_deployment_type: "binary"
+#azerothcore_deployment_type: "source"
+
+# Where the source code is downloaded to
+azerothcore_source_dest_dir: "src"
+
+# the Linux user used to run AzerothCore via. You SSH into this user to manage
+# the services, too
+azerothcore_user: azerothcore
+azerothcore_user_ssh_keys:
+  - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBYTyiEfsk3XL6tgks7toPGOnGGPKUGeplQnm2v2Yibt mcrilly@workstation"
 
 # $HOME
 home: "{{ ansible_env.HOME }}"
@@ -11,16 +32,12 @@ temp: "{{ home }}/{{ azerothcore_folder }}/temp"
 sql_dir: "{{ home }}/{{ azerothcore_folder }}/sql"
 
 # realmlist - the address of where your server runs and the name for it
-azerothcore_realmlist_name: "My Realm" 
-azerothcore_realmlist_ip: "127.0.0.1" # world server binds to this
+azerothcore_realmlist_name: "World of Solocraft"
+azerothcore_realmlist_ip: "127.0.0.1"
 azerothcore_realmlist_local_ip: "127.0.0.1"
-azerothcore_realmlist_port: "8085" # world server binds to this
-azerothcore_realmlist_auth_port: "3724" # world server binds to this
-azerothcore_realmlist_id: "1" # world server binds to this
-
-
-# Where the source code is downloaded to
-azerothcore_source: "source"
+azerothcore_realmlist_port: "8085"
+azerothcore_realmlist_auth_port: "3724"
+azerothcore_realmlist_id: "1"
 
 # Server folder name - this will be used for the symlink to the current live version
 # as well as the reference name suffixed by the commit tag
@@ -30,28 +47,20 @@ azerothcore_server: "acore"
 azerothcore_db_server: "localhost"
 azerothcore_db_port: "3306"
 azerothcore_db_user: "azerothcore"
-# TODO: we should be using Ansible vault here
-azerothcore_db_password: "azerothcore"
+azerothcore_db_password: "azerothcore" # TODO: we should be using Ansible vault here
 
 # the 3 databases used
 azerothcore_db_characters: "acore_characters"
 azerothcore_db_auth: "acore_auth"
 azerothcore_db_world: "acore_world"
 
-
 # enable server as a service (systemd), value can be "enable" or "disable"
 azerothcore_service: "enable"
-azerothcore_service_user: "azerothcore"
-azerothcore_service_group: "azerothcore"
-
-# where to get the source code from
-azerothcore_git: "https://github.com/azerothcore/azerothcore-wotlk.git"
+azerothcore_service_user: "{{ azerothcore_user }}"
+azerothcore_service_group: "{{ azerothcore_user }}"
 
 # discard changes to the repo, yes or no
 azerothcore_git_force: "yes"
-
-# the build to check out from Git
-azerothcore_branch: "master"
 azerothcore_server_release: "{{azerothcore_branch}}"
 
 # compile tools (map-extraction etc.), '1' (true) or '0' (false)
@@ -68,9 +77,26 @@ azerothcore_compiler_xx: "/usr/bin/clang++"
 azerothcore_cron_minute: "0"
 azerothcore_cron_hour: "7"
 
+####
+# Source related locations and URLs
+####
+
+# where to get the source code from
+#azerothcore_git: "https://github.com/azerothcore/azerothcore-wotlk.git"
+azerothcore_git: "https://github.com/liyunfan1223/azerothcore-wotlk.git"
+azerothcore_branch: "Playerbot"
+
+azerothcore_map_data_url: "https://github.com/wowgaming/client-data/releases/download/v16/data.zip"
+
 # Modules you want Ansible to download for you
 # Use the https:// clone link, not the git:// one
 azerothcore_modules:
+  - name: mod-challenge-modes
+    git: https://github.com/ZhengPeiRu21/mod-challenge-modes
+    version: master
   - name: mod-eluna
     git: https://github.com/azerothcore/mod-eluna.git
+    version: master
+  - name: mod-playerbots
+    git: https://github.com/liyunfan1223/mod-playerbots.git
     version: master

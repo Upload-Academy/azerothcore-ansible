@@ -1,6 +1,6 @@
 ---
 
-- name: Install package dependancies
+- name: Install package dependencies (for compiling)
   apt:
     update_cache: yes
     name:
@@ -18,5 +18,18 @@
       - mysql-server
       - libboost-all-dev
       - libstdc++-12-dev # required but not listed on AzerothCore website
-      - unzip # needed for client-side mapping data download
-  when: ansible_os_family == 'Debian'
+      - unzip # needed for client-side mapping data download/extracting
+      - net-tools # good for debugging
+      - vim
+  when: ansible_os_family == 'Debian' and azerothcore_deployment_type == 'source'
+
+- name: Install package dependencies (for binaries)
+  apt:
+    update_cache: yes
+    name:
+      - git
+      - mysql-server
+      - unzip # needed for client-side mapping data download/extracting
+      - net-tools # good for debugging
+      - vim
+  when: ansible_os_family == 'Debian' and azerothcore_deployment_type == 'binary'

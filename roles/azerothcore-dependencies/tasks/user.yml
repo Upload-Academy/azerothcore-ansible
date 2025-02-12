@@ -1,13 +1,20 @@
 ---
-
 - name: Create the AzerothCore user
   user:
-    name: azerothcore
+    name: "{{azerothcore_user}}"
+    shell: /bin/bash
 
-- name: Copy the root user's SSH key over
-  copy:
-    remote_src: yes
-    src: /root/.ssh
-    dest: /home/azerothcore/
-    owner: azerothcore
-    group: azerothcore
+- name: Ensure the .ssh directory exists for our user
+  file:
+    path: "/home/{{azerothcore_user}}/.ssh"
+    state: directory
+    owner: "{{azerothcore_user}}"
+    group: "{{azerothcore_user}}"
+    mode: "0700"
+
+- name: Add the authorized SSH key for our user
+  ansible.builtin.authorized_key:
+    user: "{{azerothcore_user}}"
+    state: present
+    key: "{{ item }}"
+  loop: "{{azerothcore_user_ssh_keys}}"

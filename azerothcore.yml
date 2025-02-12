@@ -1,0 +1,35 @@
+---
+
+- hosts: all
+  become: no
+
+  pre_tasks:
+    - name: Ensure all target directories are set up on the remote server
+      file:
+        path: "{{ item }}"
+        state: directory
+      loop:
+        - "{{ temp }}"
+        - "{{ sql_dir }}"
+        - "{{ root }}/bin/lua_scripts"
+
+    - name: Set up the databases - world, auth, characters
+      import_role:
+        name: azerothcore-database
+        tasks_from: init
+
+  roles:
+    - role: azerothcore
+    - role: azerothcore-database
+  
+  # post_tasks:   
+  #   - name: Start the services
+  #     # become: yes
+  #     # become_user: azerothcore
+  #     # become_method: sudo
+  #     ansible.builtin.command: "/usr/bin/sudo /bin/systemctl restart {{ item }}"
+  #     loop:
+  #       - "authserver.service"
+  #       - "worldserver.service"
+  #     tags:
+  #       - services

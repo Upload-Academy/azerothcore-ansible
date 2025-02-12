@@ -1,0 +1,29 @@
+---
+
+- name: Include task for downloading binaries
+  include_tasks: "tasks/binary.yml"
+  tags:
+    - binary
+
+- name: Include task for maps
+  include_tasks: "tasks/maps.yml"
+  tags:
+    - maps
+
+- name: Include task for configuration
+  include_tasks: "tasks/configuration.yml"
+  tags:
+    - configuration
+
+# Note: you still need the AC and module source for their
+# SQL files and some other data used by the auth and world
+# servers.
+- name: Include task for downloading the AzerothCore source
+  include_tasks: "tasks/source.yml"
+  tags:
+    - source
+
+- name: Include task for downloading the AzerothCore modules
+  include_tasks: "tasks/modules.yml"
+  tags:
+    - modules

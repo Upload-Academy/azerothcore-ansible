@@ -1,0 +1,29 @@
+---
+
+- name: Create the required directory for our binaries and configs
+  file:
+    path: "{{ item }}"
+    state: directory
+  loop:
+    - "{{ home }}/{{ azerothcore_folder }}/{{ azerothcore_server_release }}/bin"
+    - "{{ home }}/{{ azerothcore_folder }}/{{ azerothcore_server_release }}/bin/etc/modules"
+
+- name: Check if the worldserver has been downloaded
+  stat:
+    path: "{{ home }}/{{ azerothcore_folder }}/{{ azerothcore_server_release }}/bin/worldserver"
+  register: worldserver_binary
+
+- name: Check if the authserver has been downloaded
+  stat:
+    path: "{{ home }}/{{ azerothcore_folder }}/{{ azerothcore_server_release }}/bin/authserver"
+  register: authserver_binary
+
+- name: Download the binaries
+  ansible.builtin.get_url:
+    url: "https://github.com/Upload-Academy/azerothcore-ansible/releases/download/v0.1.0/{{ item }}"
+    dest: "{{ home }}/{{ azerothcore_folder }}/{{ azerothcore_server_release }}/bin/"
+    mode: '0770'
+  when: not worldserver_binary.stat.exists and not authserver_binary.stat.exists
+  loop:
+    - "worldserver"
+    - "authserver"
