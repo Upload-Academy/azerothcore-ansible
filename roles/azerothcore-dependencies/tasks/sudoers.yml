@@ -1,0 +1,18 @@
+---
+
+- name: Allow various sudo commands
+  template:
+    src: "etc/sudoers.d/azerothcore"
+    dest: "/etc/sudoers.d/{{ azerothcore_user }}"
+    owner: "root"
+    group: "root"
+    mode: 0440
+    validate: /usr/sbin/visudo -cf %s
+
+- name: Allow using MySQL without typing in passwords
+  template:
+    src: "sql/dot.my.cnf"
+    dest: "/home/{{ azerothcore_user }}/.my.cnf"
+    owner: "{{ azerothcore_user }}"
+    group: "{{ azerothcore_user }}"
+    mode: 0600

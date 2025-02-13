@@ -1,0 +1,11 @@
+# /etc/sudoers.d/{{azerothcore_user}}
+
+# Allow {{azerothcore_user}} user to manage specific services without a password
+{{azerothcore_user}} ALL=NOPASSWD: /bin/systemctl start authserver.service
+{{azerothcore_user}} ALL=NOPASSWD: /bin/systemctl stop authserver.service
+{{azerothcore_user}} ALL=NOPASSWD: /bin/systemctl restart authserver.service
+{{azerothcore_user}} ALL=NOPASSWD: /bin/systemctl status authserver.service
+{{azerothcore_user}} ALL=NOPASSWD: /bin/systemctl start worldserver.service
+{{azerothcore_user}} ALL=NOPASSWD: /bin/systemctl stop worldserver.service
+{{azerothcore_user}} ALL=NOPASSWD: /bin/systemctl restart worldserver.service
+{{azerothcore_user}} ALL=NOPASSWD: /bin/systemctl status worldserver.service

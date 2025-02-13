@@ -1,0 +1,22 @@
+---
+- name: Parse and upload our unit files
+  template:
+    src: "etc/systemd/system/{{ item }}.service"
+    dest: "/etc/systemd/system/{{ item }}.service"
+  loop:
+    - authserver
+    - worldserver
+  tags:
+    - systemd
+
+- name: Enable and STOP both services
+  systemd_service:
+    name: "{{ item }}"
+    state: stopped
+    enabled: yes
+    daemon_reexec: yes
+  loop:
+    - authserver
+    - worldserver
+  tags:
+    - systemd
