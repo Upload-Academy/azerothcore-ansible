@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="cloud-function">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/venv/lib64/python3.12/site-packages/ansible_collections/google/cloud/test-fixtures/cloud-function.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
